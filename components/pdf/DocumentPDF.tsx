@@ -103,6 +103,18 @@ const LABEL_MAP: Record<string, string> = {
   opcao_maquina: 'Opção da Máquina',
   opcao_equipamento: 'Opção do Equipamento',
   finalidade: 'Finalidade',
+  modelo_ecm: 'Modelo / ECM',
+  fabricante: 'Fabricante',
+  capacidade: 'Capacidade',
+  ano_fabricacao: 'Ano',
+  serial_number: 'Serial',
+  vao_trilhos: 'Vão entre trilhos (m)',
+  velocidade_translacao: 'Velocidade translação (m/min)',
+  escolta_seguranca: 'Escolta de segurança no tambor',
+  controle_remoto: 'Controle remoto',
+  potencia_motor: 'Potência do motor principal (kva)',
+  estrutura: 'Estrutura',
+  projeto_mecanico_eletrico: 'Projeto mecânico e Elétrico do equipamento',
 };
 
 export const DocumentPDF = ({ title, data, metadata }: DocumentPDFProps) => {
