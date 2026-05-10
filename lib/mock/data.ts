@@ -784,9 +784,18 @@ export const flowApreciacaoELaudo: Flow = {
               order: 2,
               options: [
                 { label: 'C - Conforme', value: 'C' },
+                { label: 'PA - Precisa de ajuste', value: 'PA' },
                 { label: 'NC - Não Conforme', value: 'NC' },
                 { label: 'NA - Não Aplicável', value: 'NA' },
               ],
+            },
+            {
+              id: 'plano_acao_construcao',
+              name: 'planoAcaoConstrucao',
+              label: 'Plano de ação (Construção Robusta)',
+              type: 'textarea',
+              required: false,
+              placeholder: 'Digite o texto relacionado ao plano de ação a ser adotado...',
             },
             {
               id: 'check_fixacao',
@@ -797,9 +806,18 @@ export const flowApreciacaoELaudo: Flow = {
               order: 3,
               options: [
                 { label: 'C - Conforme', value: 'C' },
+                { label: 'PA - Precisa de ajuste', value: 'PA' },
                 { label: 'NC - Não Conforme', value: 'NC' },
                 { label: 'NA - Não Aplicável', value: 'NA' },
               ],
+            },
+            {
+              id: 'plano_acao_fixacao',
+              name: 'planoAcaoFixacao',
+              label: 'Plano de ação (Fixação segura)',
+              type: 'textarea',
+              required: false,
+              placeholder: 'Digite o texto relacionado ao plano de ação a ser adotado...',
             },
             {
               id: 'check_riscos_adic',
@@ -810,9 +828,18 @@ export const flowApreciacaoELaudo: Flow = {
               order: 4,
               options: [
                 { label: 'C - Conforme', value: 'C' },
+                { label: 'PA - Precisa de ajuste', value: 'PA' },
                 { label: 'NC - Não Conforme', value: 'NC' },
                 { label: 'NA - Não Aplicável', value: 'NA' },
               ],
+            },
+            {
+              id: 'plano_acao_riscos_adic',
+              name: 'planoAcaoRiscosAdic',
+              label: 'Plano de ação (Riscos adicionais)',
+              type: 'textarea',
+              required: false,
+              placeholder: 'Digite o texto relacionado ao plano de ação a ser adotado...',
             },
             {
               id: 'check_burlas',
@@ -823,9 +850,18 @@ export const flowApreciacaoELaudo: Flow = {
               order: 5,
               options: [
                 { label: 'C - Conforme', value: 'C' },
+                { label: 'PA - Precisa de ajuste', value: 'PA' },
                 { label: 'NC - Não Conforme', value: 'NC' },
                 { label: 'NA - Não Aplicável', value: 'NA' },
               ],
+            },
+            {
+              id: 'plano_acao_burlas',
+              name: 'planoAcaoBurlas',
+              label: 'Plano de ação (Burlas)',
+              type: 'textarea',
+              required: false,
+              placeholder: 'Digite o texto relacionado ao plano de ação a ser adotado...',
             },
             {
               id: 'check_distancia',
@@ -836,9 +872,18 @@ export const flowApreciacaoELaudo: Flow = {
               order: 6,
               options: [
                 { label: 'C - Conforme', value: 'C' },
+                { label: 'PA - Precisa de ajuste', value: 'PA' },
                 { label: 'NC - Não Conforme', value: 'NC' },
                 { label: 'NA - Não Aplicável', value: 'NA' },
               ],
+            },
+            {
+              id: 'plano_acao_distancia',
+              name: 'planoAcaoDistancia',
+              label: 'Plano de ação (Distância segura)',
+              type: 'textarea',
+              required: false,
+              placeholder: 'Digite o texto relacionado ao plano de ação a ser adotado...',
             },
             {
               id: 'check_observacao',
@@ -849,9 +894,18 @@ export const flowApreciacaoELaudo: Flow = {
               order: 7,
               options: [
                 { label: 'C - Conforme', value: 'C' },
+                { label: 'PA - Precisa de ajuste', value: 'PA' },
                 { label: 'NC - Não Conforme', value: 'NC' },
                 { label: 'NA - Não Aplicável', value: 'NA' },
               ],
+            },
+            {
+              id: 'plano_acao_observacao',
+              name: 'planoAcaoObservacao',
+              label: 'Plano de ação (Observação do ciclo)',
+              type: 'textarea',
+              required: false,
+              placeholder: 'Digite o texto relacionado ao plano de ação a ser adotado...',
             },
             {
               id: 'check_ajustes',
@@ -862,9 +916,18 @@ export const flowApreciacaoELaudo: Flow = {
               order: 8,
               options: [
                 { label: 'C - Conforme', value: 'C' },
+                { label: 'PA - Precisa de ajuste', value: 'PA' },
                 { label: 'NC - Não Conforme', value: 'NC' },
                 { label: 'NA - Não Aplicável', value: 'NA' },
               ],
+            },
+            {
+              id: 'plano_acao_ajustes',
+              name: 'planoAcaoAjustes',
+              label: 'Plano de ação (Ajustes e manutenção)',
+              type: 'textarea',
+              required: false,
+              placeholder: 'Digite o texto relacionado ao plano de ação a ser adotado...',
             },
             {
               id: 'observacoes_finais_protecao',

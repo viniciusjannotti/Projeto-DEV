@@ -26,6 +26,7 @@ export function FormPage({ page, responses, onChange }: FormPageProps) {
             <FieldRenderer 
               field={field} 
               value={responses[field.id]} 
+              allResponses={responses}
               onChange={(val: any) => onChange(field.id, val)} 
             />
           </div>

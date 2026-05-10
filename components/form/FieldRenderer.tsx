@@ -6,10 +6,11 @@ import { useDropzone } from 'react-dropzone';
 interface FieldRendererProps {
   field: Field;
   value: any;
+  allResponses?: Record<string, any>;
   onChange: (value: any) => void;
 }
 
-export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
+export function FieldRenderer({ field, value, allResponses, onChange }: FieldRendererProps) {
   const [isUploading, setIsUploading] = useState(false);
 
   // Configuracao Dropzone (para o tipo File)
@@ -46,7 +47,8 @@ export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
           onChange={(e) => onChange(e.target.value)}
           placeholder={field.placeholder}
           required={field.required}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow hover:border-gray-400 outline-none"
+          readOnly={field.id === 'protecao_id_nome' && !!value}
+          className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow hover:border-gray-400 outline-none ${field.id === 'protecao_id_nome' && !!value ? 'bg-gray-100 cursor-not-allowed font-semibold text-primary' : ''}`}
         />
       );
       
@@ -174,7 +176,16 @@ export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
               </button>
               
               <div className="grid grid-cols-1 gap-6">
-                {field.subFields?.map((subField) => (
+                {field.subFields
+                  ?.filter((subField) => {
+                    if (subField.id.startsWith('plano_acao_')) {
+                      const checkFieldId = subField.id.replace('plano_acao_', 'check_');
+                      const val = item[checkFieldId];
+                      return val === 'NC' || val === 'PA';
+                    }
+                    return true;
+                  })
+                  .map((subField) => (
                   <div key={subField.id} className="space-y-1">
                     <label className="block text-sm font-semibold text-gray-700">
                       {subField.label} {subField.required && <span className="text-red-400">*</span>}
@@ -182,6 +193,7 @@ export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
                     <FieldRenderer 
                       field={subField}
                       value={item[subField.id]}
+                      allResponses={allResponses}
                       onChange={(subVal) => {
                         const newList = [...list];
                         newList[idx] = { ...newList[idx], [subField.id]: subVal };
@@ -195,7 +207,20 @@ export function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
           ))}
           <button 
             type="button" 
-            onClick={() => onChange([...list, {}])}
+            onClick={() => {
+              const newItem: any = {};
+              if (field.id === 'lista_dispositivos_detalhada') {
+                newItem.device_posicao = `1.${list.length + 1}`;
+              }
+              // Item 8 linking: Automatically pull position from Item 7
+              if (field.id === 'lista_avaliacao_mecanica') {
+                const item7List = allResponses?.['lista_dispositivos_detalhada'] || [];
+                if (item7List[list.length]) {
+                  newItem.protecao_id_nome = item7List[list.length].device_posicao;
+                }
+              }
+              onChange([...list, newItem]);
+            }}
             className="w-full py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 hover:border-primary hover:text-primary hover:bg-blue-50/30 transition-all flex items-center justify-center gap-2 font-bold bg-white/50"
           >
             <Plus className="w-5 h-5" />
