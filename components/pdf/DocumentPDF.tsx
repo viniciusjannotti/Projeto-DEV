@@ -1,4 +1,5 @@
 import { Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/renderer';
+import { Flow, Field } from '@/types';
 
 // Create styles
 const styles = StyleSheet.create({
@@ -93,6 +94,7 @@ interface DocumentPDFProps {
     docId: string;
     date: string;
   };
+  flow?: Flow;
 }
 
 // Em um ambiente real, mapearíamos id -> label ou teríamos isso já consolidado
@@ -180,7 +182,42 @@ const LABEL_MAP: Record<string, string> = {
   assinatura_placeholder: 'Assinatura',
 };
 
-export const DocumentPDF = ({ title, data, metadata }: DocumentPDFProps) => {
+function getFieldOptionsMap(flow?: Flow): Record<string, Record<string, string>> {
+  const map: Record<string, Record<string, string>> = {};
+  if (!flow) return map;
+
+  function collectFields(fields: Field[]) {
+    for (const field of fields) {
+      if (field.type === 'select' && field.options) {
+        map[field.id] = {};
+        for (const opt of field.options) {
+          map[field.id][opt.value] = opt.label;
+        }
+      }
+      if (field.type === 'repeatable' && field.subFields) {
+        collectFields(field.subFields);
+      }
+    }
+  }
+
+  for (const page of flow.pages) {
+    collectFields(page.fields);
+  }
+
+  return map;
+}
+
+function getDisplayValue(key: string, value: any, optionsMap: Record<string, Record<string, string>>): string {
+  if (typeof value !== 'string') return String(value);
+  const fieldOptions = optionsMap[key];
+  if (fieldOptions && fieldOptions[value]) {
+    return fieldOptions[value];
+  }
+  return String(value);
+}
+
+export const DocumentPDF = ({ title, data, metadata, flow }: DocumentPDFProps) => {
+  const optionsMap = getFieldOptionsMap(flow);
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -191,56 +228,56 @@ export const DocumentPDF = ({ title, data, metadata }: DocumentPDFProps) => {
           </View>
           <View style={styles.logoPlaceholder}>
             {data['logo_empresa'] ? (
-              <Image src={data['logo_empresa']} style={{width: 60, height: 60}} />
+              <Image src={data['logo_empresa']} style={{ width: 60, height: 60 }} />
             ) : (
-              <Text style={{fontSize: 8, color: '#94a3b8'}}>Sem Logo</Text>
+              <Text style={{ fontSize: 8, color: '#94a3b8' }}>Sem Logo</Text>
             )}
           </View>
         </View>
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Dados Preenchidos</Text>
-          
+
           {Object.entries(data).map(([key, value]) => {
             if (!value || key === 'logo_empresa') return null;
-            
+
             // Verifica se é imagem provalmente
             const isImage = typeof value === 'string' && value.startsWith('data:image');
-            
+
             return (
               <View key={key} style={styles.fieldRow}>
                 <Text style={styles.fieldLabel}>{LABEL_MAP[key] || key}</Text>
                 {isImage ? (
                   <View style={styles.fieldValue}>
-                    <Text style={{fontSize: 8, color: '#64748b'}}>Imagem Anexada</Text>
+                    <Text style={{ fontSize: 8, color: '#64748b' }}>Imagem Anexada</Text>
                     <Image src={value} style={styles.uploadedImage} />
                   </View>
                 ) : Array.isArray(value) ? (
-                  <View style={{...styles.fieldValue, flexDirection: 'column'}}>
+                  <View style={{ ...styles.fieldValue, flexDirection: 'column' }}>
                     {value.map((item, index) => (
-                      <View key={index} style={{marginBottom: 8, paddingBottom: 8, borderBottomWidth: index < value.length - 1 ? 1 : 0, borderBottomColor: '#e2e8f0'}}>
-                        <Text style={{fontSize: 10, fontFamily: 'Helvetica-Bold', marginBottom: 4, color: '#1E3A5F'}}>Item {index + 1}</Text>
+                      <View key={index} style={{ marginBottom: 8, paddingBottom: 8, borderBottomWidth: index < value.length - 1 ? 1 : 0, borderBottomColor: '#e2e8f0' }}>
+                        <Text style={{ fontSize: 10, fontFamily: 'Helvetica-Bold', marginBottom: 4, color: '#1E3A5F' }}>Item {index + 1}</Text>
                         {Object.entries(item).map(([subKey, subVal]) => {
-                           if (!subVal) return null;
-                           const isSubImage = typeof subVal === 'string' && subVal.startsWith('data:image');
-                           return (
-                             <View key={subKey} style={{flexDirection: 'row', marginBottom: 4}}>
-                               <Text style={{width: '40%', fontSize: 9, color: '#475569', fontFamily: 'Helvetica-Bold'}}>{LABEL_MAP[subKey] || subKey}: </Text>
-                               {isSubImage ? (
-                                  <View style={{width: '60%'}}>
-                                    <Image src={subVal as string} style={{...styles.uploadedImage, width: 100}} />
-                                  </View>
-                               ) : (
-                                  <Text style={{width: '60%', fontSize: 9, color: '#0f172a'}}>{String(subVal)}</Text>
-                               )}
-                             </View>
-                           )
+                          if (!subVal) return null;
+                          const isSubImage = typeof subVal === 'string' && subVal.startsWith('data:image');
+                          return (
+                            <View key={subKey} style={{ flexDirection: 'row', marginBottom: 4 }}>
+                              <Text style={{ width: '40%', fontSize: 9, color: '#475569', fontFamily: 'Helvetica-Bold' }}>{LABEL_MAP[subKey] || subKey}: </Text>
+                              {isSubImage ? (
+                                <View style={{ width: '60%' }}>
+                                  <Image src={subVal as string} style={{ ...styles.uploadedImage, width: 100 }} />
+                                </View>
+                              ) : (
+                                <Text style={{ width: '60%', fontSize: 9, color: '#0f172a' }}>{getDisplayValue(subKey, subVal, optionsMap)}</Text>
+                              )}
+                            </View>
+                          )
                         })}
                       </View>
                     ))}
                   </View>
                 ) : (
-                  <Text style={styles.fieldValue}>{String(value)}</Text>
+                  <Text style={styles.fieldValue}>{getDisplayValue(key, value, optionsMap)}</Text>
                 )}
               </View>
             );
@@ -251,8 +288,8 @@ export const DocumentPDF = ({ title, data, metadata }: DocumentPDFProps) => {
           Gerado pelo sistema ATerra em {metadata.date} | Ref: {metadata.docId}
         </Text>
         <Text render={({ pageNumber, totalPages }) => (
-            `Página ${pageNumber} de ${totalPages}`
-          )} fixed style={{...styles.footer, textAlign: 'right', borderTopWidth: 0}} />
+          `Página ${pageNumber} de ${totalPages}`
+        )} fixed style={{ ...styles.footer, textAlign: 'right', borderTopWidth: 0 }} />
       </Page>
     </Document>
   );

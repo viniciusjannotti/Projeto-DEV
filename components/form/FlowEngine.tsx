@@ -53,7 +53,7 @@ export function FlowEngine({ documentId, flow, initialResponses, initialPageId }
       responses,
       currentPageId: currentPage.id
     });
-    
+
     // Simula rede
     setTimeout(() => {
       setSaving(false);
@@ -69,17 +69,18 @@ export function FlowEngine({ documentId, flow, initialResponses, initialPageId }
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Laudo Concluído com Sucesso!</h2>
         <p className="text-gray-600 mb-8">Todos os dados foram salvos e o documento está pronto para ser gerado.</p>
-        
+
         <div className="flex flex-col sm:flex-row justify-center gap-4 text-left">
           <Link href="/documents" className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium text-center">
             Voltar aos Documentos
           </Link>
           <PDFDownloadLink
             document={
-              <DocumentPDF 
-                title={document.title || flow.title} 
-                data={responses} 
+              <DocumentPDF
+                title={document.title || flow.title}
+                data={responses}
                 metadata={{ docId: documentId, date: new Date().toLocaleDateString() }}
+                flow={flow}
               />
             }
             fileName={`Laudo-${documentId}.pdf`}
@@ -120,8 +121,8 @@ export function FlowEngine({ documentId, flow, initialResponses, initialPageId }
             <span>{progress}%</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className="bg-secondary h-2 rounded-full transition-all duration-500 ease-out" 
+            <div
+              className="bg-secondary h-2 rounded-full transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
@@ -129,18 +130,18 @@ export function FlowEngine({ documentId, flow, initialResponses, initialPageId }
       </div>
 
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <FormPage 
-          page={currentPage} 
-          responses={responses} 
-          onChange={updateResponse} 
+        <FormPage
+          page={currentPage}
+          responses={responses}
+          onChange={updateResponse}
         />
       </div>
 
       <div className="mt-8 border-t border-gray-200 pt-6">
-        <NavigationBar 
-          canGoBack={canGoBack} 
-          isLastPage={isLastPage} 
-          onPrevious={handlePrevious} 
+        <NavigationBar
+          canGoBack={canGoBack}
+          isLastPage={isLastPage}
+          onPrevious={handlePrevious}
           onNext={handleNext}
           onFinish={handleFinish}
         />
