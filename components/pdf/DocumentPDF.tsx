@@ -215,6 +215,30 @@ export const DocumentPDF = ({ title, data, metadata }: DocumentPDFProps) => {
                     <Text style={{fontSize: 8, color: '#64748b'}}>Imagem Anexada</Text>
                     <Image src={value} style={styles.uploadedImage} />
                   </View>
+                ) : Array.isArray(value) ? (
+                  <View style={{...styles.fieldValue, flexDirection: 'column'}}>
+                    {value.map((item, index) => (
+                      <View key={index} style={{marginBottom: 8, paddingBottom: 8, borderBottomWidth: index < value.length - 1 ? 1 : 0, borderBottomColor: '#e2e8f0'}}>
+                        <Text style={{fontSize: 10, fontFamily: 'Helvetica-Bold', marginBottom: 4, color: '#1E3A5F'}}>Item {index + 1}</Text>
+                        {Object.entries(item).map(([subKey, subVal]) => {
+                           if (!subVal) return null;
+                           const isSubImage = typeof subVal === 'string' && subVal.startsWith('data:image');
+                           return (
+                             <View key={subKey} style={{flexDirection: 'row', marginBottom: 4}}>
+                               <Text style={{width: '40%', fontSize: 9, color: '#475569', fontFamily: 'Helvetica-Bold'}}>{LABEL_MAP[subKey] || subKey}: </Text>
+                               {isSubImage ? (
+                                  <View style={{width: '60%'}}>
+                                    <Image src={subVal as string} style={{...styles.uploadedImage, width: 100}} />
+                                  </View>
+                               ) : (
+                                  <Text style={{width: '60%', fontSize: 9, color: '#0f172a'}}>{String(subVal)}</Text>
+                               )}
+                             </View>
+                           )
+                        })}
+                      </View>
+                    ))}
+                  </View>
                 ) : (
                   <Text style={styles.fieldValue}>{String(value)}</Text>
                 )}
