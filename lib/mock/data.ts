@@ -796,6 +796,7 @@ export const flowApreciacaoELaudo: Flow = {
               type: 'textarea',
               required: false,
               placeholder: 'Digite o texto relacionado ao plano de ação a ser adotado...',
+              order: 2.1,
             },
             {
               id: 'check_fixacao',
@@ -818,6 +819,7 @@ export const flowApreciacaoELaudo: Flow = {
               type: 'textarea',
               required: false,
               placeholder: 'Digite o texto relacionado ao plano de ação a ser adotado...',
+              order: 3.1,
             },
             {
               id: 'check_riscos_adic',
@@ -840,6 +842,7 @@ export const flowApreciacaoELaudo: Flow = {
               type: 'textarea',
               required: false,
               placeholder: 'Digite o texto relacionado ao plano de ação a ser adotado...',
+              order: 4.1,
             },
             {
               id: 'check_burlas',
@@ -862,6 +865,7 @@ export const flowApreciacaoELaudo: Flow = {
               type: 'textarea',
               required: false,
               placeholder: 'Digite o texto relacionado ao plano de ação a ser adotado...',
+              order: 5.1,
             },
             {
               id: 'check_distancia',
@@ -884,6 +888,7 @@ export const flowApreciacaoELaudo: Flow = {
               type: 'textarea',
               required: false,
               placeholder: 'Digite o texto relacionado ao plano de ação a ser adotado...',
+              order: 6.1,
             },
             {
               id: 'check_observacao',
@@ -906,6 +911,7 @@ export const flowApreciacaoELaudo: Flow = {
               type: 'textarea',
               required: false,
               placeholder: 'Digite o texto relacionado ao plano de ação a ser adotado...',
+              order: 7.1,
             },
             {
               id: 'check_ajustes',
@@ -928,6 +934,7 @@ export const flowApreciacaoELaudo: Flow = {
               type: 'textarea',
               required: false,
               placeholder: 'Digite o texto relacionado ao plano de ação a ser adotado...',
+              order: 8.1,
             },
             {
               id: 'observacoes_finais_protecao',
